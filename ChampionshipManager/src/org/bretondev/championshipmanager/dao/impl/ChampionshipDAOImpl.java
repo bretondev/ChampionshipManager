@@ -22,47 +22,34 @@ public class ChampionshipDAOImpl implements ChampionshipDAO{
     @Override
     public List<Championship> listChampionships() {
         Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        
         List<Championship> list = session.createCriteria(Championship.class).list();
-        
-        session.getTransaction().commit();
-        
         return list;
     }
     
     @Override
     public void createChampionship(Championship c) {
     	Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
         session.save(c);
-        session.getTransaction().commit();
     }
     
     @Override
     public void deleteChampionship(Integer id) {
     	Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
         Query q = session.createQuery("DELETE FROM Championship WHERE id = :id").setInteger("id", id);
         q.executeUpdate();
-        session.getTransaction().commit();
     }
     
     @Override
     public Championship loadChampionship(Integer id) {
     	Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
         Championship c = (Championship) session.get(Championship.class, id);
-        session.getTransaction().commit();
         return c;
     }
     
     @Override
     public void updateChampionship(Championship c) {
     	Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
         session.update(c);
-        session.getTransaction().commit();
     }
 }
 

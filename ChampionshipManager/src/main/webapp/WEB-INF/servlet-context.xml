@@ -41,9 +41,15 @@
                 <beans:prop key="hibernate.show_sql">true</beans:prop>
                 <beans:prop key="hibernate.hbm2ddl.auto">update</beans:prop>
                 <beans:prop key="hibernate.ejb.interceptor">main.LoggingInterceptor</beans:prop>
-                <beans:prop key="hibernate.current_session_context_class">thread</beans:prop>
+                <beans:prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</beans:prop>
             </beans:props>
         </beans:property>
+    </beans:bean>
+    
+	<!-- Inject the transaction manager  -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <beans:bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <beans:property name="sessionFactory" ref="hibernateAnnotatedSessionFactory" />
     </beans:bean>
     
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources 
