@@ -4,6 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <t:genericpage>
+test
     <jsp:attribute name="header">
       <h2>Liste des compétitions</h2>
     </jsp:attribute>
