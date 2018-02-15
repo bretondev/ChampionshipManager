@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <!-- a SessionFactory instance listed as /jndi/name -->
+    <session-factory>
+
+        <!-- properties -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://poc.cmnkcqvxmzmt.us-east-2.rds.amazonaws.com/ChampionshipManager</property>
+        <property name="hibernate.connection.username">admin</property>
+        <property name="hibernate.connection.password">dgedev18</property>
+        
+        <property name="show_sql">true</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hbm2ddl.auto">update</property>
+        <property name="hibernate.ejb.interceptor">main.LoggingInterceptor</property>
+        
+        <property name="hibernate.current_session_context_class">thread</property>
+        
+        <!-- mapping files -->
+        <!-- mapping resource="user.hbm.xml"/> -->
+
+		<mapping class="org.bretondev.championshipmanager.entities.Championship"></mapping> 
+		<!-- mapping class="entities.Team"></mapping>  -->
+		<!-- <mapping class="entities.Player"></mapping>  -->
+		<!-- <mapping class="entities.Country"></mapping>  -->
+    </session-factory>
+
+</hibernate-configuration>
