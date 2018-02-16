@@ -3,15 +3,19 @@
 	xmlns="http://www.springframework.org/schema/mvc"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:cache="http://www.springframework.org/schema/cache"  
     xmlns:context="http://www.springframework.org/schema/context" 
     xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
  
     <!-- Enables the Spring MVC annotations ex/ @Controller -->
     <annotation-driven />
+    
+	<cache:annotation-driven />
     
     <!-- Set the package where the annotated classes located at ex @Controller -->
     <context:component-scan base-package="org.bretondev.championshipmanager" />
@@ -20,6 +24,15 @@
         up static resources in the ${webappRoot}/resources directory -->
     <resources mapping="/**" location="/" />
  
+	<beans:bean id="cacheManager"  class="org.springframework.cache.support.SimpleCacheManager">   
+		<beans:property name="caches">   
+			<beans:set>   
+				<beans:bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="default"/>   
+				<beans:bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="dataCache"/>   
+			</beans:set>   
+		</beans:property>   
+	</beans:bean>
+
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <beans:property name="url" value="jdbc:mysql://poc.cmnkcqvxmzmt.us-east-2.rds.amazonaws.com/ChampionshipManager" />
