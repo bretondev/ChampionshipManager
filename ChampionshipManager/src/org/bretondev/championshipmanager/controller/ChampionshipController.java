@@ -2,6 +2,9 @@ package org.bretondev.championshipmanager.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+
 import org.bretondev.championshipmanager.entities.Championship;
 import org.bretondev.championshipmanager.service.ChampionshipService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +15,27 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.ServletConfigAware;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value = "/championship")
-public class ChampionshipController {
+public class ChampionshipController implements ServletContextAware, ServletConfigAware{
 
+	private ServletContext servletContext;
+	private ServletConfig servletConfig;
+	
+	@Override
+	public void setServletConfig(ServletConfig servletConfig) {
+		this.servletConfig = servletConfig;
+	}
+
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
+	}
+	
 	private ChampionshipService championshipService;
 	
 	@Autowired(required = true)
@@ -27,8 +45,14 @@ public class ChampionshipController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String listCustomers(@ModelAttribute ArrayList<Championship> championships, Model model) {
+	public String listChampionships(@ModelAttribute ArrayList<Championship> championships, Model model) {
 	    model.addAttribute("championships", this.championshipService.listChampionships());
+	    
+	    //Temporaire - sert à voir comment fonctionne ServletContext et ServletConfig
+	    System.out.println(servletContext.getContextPath());
+	    System.out.println(servletConfig.getServletName());
+	    
+	    
 	    return "/championship/list";
 	}
 	
@@ -64,5 +88,7 @@ public class ChampionshipController {
 		model.addAttribute("championship", c);
 	    return "/championship/update";
 	}
+
+
 
 }
