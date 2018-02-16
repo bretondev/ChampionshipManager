@@ -16,7 +16,18 @@
 			            	<form:label path="name">Nom</form:label>
 			            	<form:input class="form-control" path="name"/>
 		            	</div>
+			           	<c:if test="${not empty errorName}">
+			            	<div class="alert alert-danger fade in">
+						   		Erreur: ${errorName}
+						   </div>
+						</c:if>
+						<c:if test="${not empty errorUnique}">
+			            	<div class="alert alert-danger fade in">
+						   		Erreur: ${errorUnique}
+						   </div>
+						</c:if>
 		            </td>
+
 		        </tr>
 			</table>
 			<input class="btn btn-primary" type="submit" value="Créer" />

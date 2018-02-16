@@ -52,4 +52,19 @@ public class ChampionshipServiceImpl implements ChampionshipService{
     public Championship loadChampionship(Integer id) {
         return this.championshipDAO.loadChampionship(id);
     }
+    
+    @Override
+    @Transactional
+    public boolean isNameUnique(String name) {
+    	List<Championship> list  = this.championshipDAO.listChampionships();
+    	boolean unique = true;
+    	for (Championship c : list) {
+    		if (c.getName().equals(name)) {
+    			unique = false;
+    			break;
+    		}
+    	}
+    	
+    	return unique;
+    }
 }

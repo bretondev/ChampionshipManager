@@ -15,5 +15,7 @@ public interface ChampionshipService {
 	Championship loadChampionship(Integer id);
 
 	void updateChampionship(Championship c);
+
+	boolean isNameUnique(String name);
 	
 }

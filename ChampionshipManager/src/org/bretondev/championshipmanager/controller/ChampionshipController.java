@@ -1,6 +1,8 @@
 package org.bretondev.championshipmanager.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -62,21 +64,45 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 	}
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public String createChampionship(@ModelAttribute("championship") Championship championship) {
-		this.championshipService.createChampionship(championship);
-	    return "redirect:/championship/";
+	public ModelAndView createChampionship(@ModelAttribute("championship") Championship championship) {
+		
+		Map<String,Object> modelData = new HashMap<String, Object>();
+		if (championship.getName().isEmpty() || championship.getName().length() > 255)
+			modelData.put("errorName", "Le nom doit faire entre 1 et 255 caractères.");
+		if (!championshipService.isNameUnique(championship.getName()))
+			modelData.put("errorUnique", "Une compétiton comporte déjà ce nom");
+		
+		if (modelData.size() > 0) {
+			modelData.put("championship", championship);
+			return new ModelAndView("/championship/create", modelData);
+		} else {
+			this.championshipService.createChampionship(championship);
+		    return new ModelAndView("redirect:/championship/");
+		}
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
-	public String deleteChampionship(@RequestParam("id") Integer id) {
-		this.championshipService.deleteChampionship(id);
+	public String deleteChampionship(@RequestParam("id") Integer id, @RequestParam Map<String,String> params) {
+		this.championshipService.deleteChampionship(Integer.valueOf(params.get("id")));
 	    return "redirect:/championship/";
 	}
 	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
-	public String updateChampionship(@ModelAttribute("championship") Championship championship) {
-		this.championshipService.updateChampionship(championship);
-	    return "redirect:/championship/";
+	public ModelAndView updateChampionship(@ModelAttribute("championship") Championship championship) {
+		
+		Map<String,Object> modelData = new HashMap<String, Object>();
+		if (championship.getName().isEmpty() || championship.getName().length() > 255)
+			modelData.put("errorName", "Le nom doit faire entre 1 et 255 caractères.");
+		if (!championshipService.isNameUnique(championship.getName()))
+			modelData.put("errorUnique", "Une compétition comporte déjà ce nom");
+		
+		if (modelData.size() > 0) {
+			modelData.put("championship", championship);
+			return new ModelAndView("/championship/update", modelData);
+		} else {
+			this.championshipService.updateChampionship(championship);
+		    return new ModelAndView("redirect:/championship/");
+		}
 	}
 	
 	@RequestMapping(value="/openUpdate", method = RequestMethod.POST)
