@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,6 +47,11 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 	    this.championshipService = cs;
 	}
 
+	@ExceptionHandler
+	public String exceptionHandler(Exception e) {
+		return "error";
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public String listChampionships(@ModelAttribute ArrayList<Championship> championships, Model model) {
 	    model.addAttribute("championships", this.championshipService.listChampionships());
