@@ -62,24 +62,21 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 	}
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public String createChampionship(@ModelAttribute("championship") Championship championship, Model model) {
+	public String createChampionship(@ModelAttribute("championship") Championship championship) {
 		this.championshipService.createChampionship(championship);
-		model.addAttribute("championships", this.championshipService.listChampionships());
-	    return "/championship/list";
+	    return "redirect:/championship/";
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
-	public String deleteChampionship(@RequestParam("id") Integer id, Model model) {
+	public String deleteChampionship(@RequestParam("id") Integer id) {
 		this.championshipService.deleteChampionship(id);
-		model.addAttribute("championships", this.championshipService.listChampionships());
-	    return "/championship/list";
+	    return "redirect:/championship/";
 	}
 	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
-	public String updateChampionship(@ModelAttribute("championship") Championship championship, Model model) {
+	public String updateChampionship(@ModelAttribute("championship") Championship championship) {
 		this.championshipService.updateChampionship(championship);
-		model.addAttribute("championships", this.championshipService.listChampionships());
-	    return "/championship/list";
+	    return "redirect:/championship/";
 	}
 	
 	@RequestMapping(value="/openUpdate", method = RequestMethod.POST)
