@@ -1,7 +1,7 @@
 package org.bretondev.championshipmanager.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -18,12 +18,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.ServletConfigAware;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value = "/championship")
+@SessionAttributes("championships")
 public class ChampionshipController implements ServletContextAware, ServletConfigAware{
 
 	private ServletContext servletContext;
@@ -52,14 +55,16 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 		return "error";
 	}
 	
+	@ModelAttribute(name="championships")
+	public List<Championship> getChampionships() {
+		return this.championshipService.listChampionships();
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
-	public String listChampionships(@ModelAttribute ArrayList<Championship> championships, Model model) {
-	    model.addAttribute("championships", this.championshipService.listChampionships());
-	    
+	public String listChampionships(Model model) {
 	    //Temporaire - sert à voir comment fonctionne ServletContext et ServletConfig
 	    System.out.println(servletContext.getContextPath());
 	    System.out.println(servletConfig.getServletName());
-	    
 	    
 	    return "/championship/list";
 	}
@@ -71,7 +76,7 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
 	public ModelAndView createChampionship(@ModelAttribute("championship") Championship championship) {
-		
+				
 		Map<String,Object> modelData = new HashMap<String, Object>();
 		if (championship.getName().isEmpty() || championship.getName().length() > 255)
 			modelData.put("errorName", "Le nom doit faire entre 1 et 255 caractères.");
@@ -88,8 +93,9 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
-	public String deleteChampionship(@RequestParam("id") Integer id, @RequestParam Map<String,String> params) {
+	public String deleteChampionship(@RequestParam("id") Integer id, @RequestParam Map<String,String> params, SessionStatus ss) {
 		this.championshipService.deleteChampionship(Integer.valueOf(params.get("id")));
+		ss.setComplete();
 	    return "redirect:/championship/";
 	}
 	
