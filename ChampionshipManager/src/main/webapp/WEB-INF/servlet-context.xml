@@ -15,6 +15,11 @@
     <!-- Enables the Spring MVC annotations ex/ @Controller -->
     <annotation-driven />
     
+    <!-- Enables the Interceptors -->
+    <interceptors>
+    	<beans:bean class="org.bretondev.championshipmanager.interceptor.ControllerInterceptor" />
+    </interceptors>
+    
 	<cache:annotation-driven />
     
     <!-- Set the package where the annotated classes located at ex @Controller -->
