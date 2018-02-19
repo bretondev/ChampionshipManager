@@ -9,10 +9,12 @@ import javax.servlet.ServletContext;
 
 import org.bretondev.championshipmanager.entities.Championship;
 import org.bretondev.championshipmanager.service.ChampionshipService;
+import org.bretondev.championshipmanager.validator.ChampionshipValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +52,14 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 	    this.championshipService = cs;
 	}
 
+	private ChampionshipValidator championshipValidator;
+	
+	@Autowired(required = true)
+	@Qualifier(value = "championshipValidator")
+	public void setChampionshipValidator(ChampionshipValidator cv) {
+	    this.championshipValidator = cv;
+	}
+	
 	@ExceptionHandler
 	public String exceptionHandler(Exception e) {
 		return "error";
@@ -75,21 +85,20 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 	}
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public ModelAndView createChampionship(@ModelAttribute("championship") Championship championship) {
-				
-		Map<String,Object> modelData = new HashMap<String, Object>();
-		if (championship.getName().isEmpty() || championship.getName().length() > 255)
-			modelData.put("errorName", "Le nom doit faire entre 1 et 255 caractères.");
-		if (!championshipService.isNameUnique(championship.getName()))
-			modelData.put("errorUnique", "Une compétiton comporte déjà ce nom");
+	public ModelAndView createChampionship(@ModelAttribute("championship") Championship championship, BindingResult br, SessionStatus ss) {
 		
-		if (modelData.size() > 0) {
+		championshipValidator.validate(championship, br);
+		
+		Map<String,Object> modelData = new HashMap<String, Object>();
+		if (br.hasErrors()) {
 			modelData.put("championship", championship);
 			return new ModelAndView("/championship/create", modelData);
 		} else {
 			this.championshipService.createChampionship(championship);
+			ss.setComplete();
 		    return new ModelAndView("redirect:/championship/");
 		}
+		
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
@@ -99,31 +108,27 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 	    return "redirect:/championship/";
 	}
 	
-	@RequestMapping(value="/update", method = RequestMethod.POST)
-	public ModelAndView updateChampionship(@ModelAttribute("championship") Championship championship) {
-		
-		Map<String,Object> modelData = new HashMap<String, Object>();
-		if (championship.getName().isEmpty() || championship.getName().length() > 255)
-			modelData.put("errorName", "Le nom doit faire entre 1 et 255 caractères.");
-		if (!championshipService.isNameUnique(championship.getName()))
-			modelData.put("errorUnique", "Une compétition comporte déjà ce nom");
-		
-		if (modelData.size() > 0) {
-			modelData.put("championship", championship);
-			return new ModelAndView("/championship/update", modelData);
-		} else {
-			this.championshipService.updateChampionship(championship);
-		    return new ModelAndView("redirect:/championship/");
-		}
-	}
-	
 	@RequestMapping(value="/openUpdate", method = RequestMethod.POST)
 	public String openUpdateChampionship(@RequestParam("id") Integer id, Model model) {
 		Championship c = this.championshipService.loadChampionship(id);
 		model.addAttribute("championship", c);
 	    return "/championship/update";
 	}
-
-
-
+	
+	@RequestMapping(value="/update", method = RequestMethod.POST)
+	public ModelAndView updateChampionship(@ModelAttribute("championship") Championship championship, BindingResult br, SessionStatus ss) {
+		
+		championshipValidator.validate(championship, br);
+		
+		Map<String,Object> modelData = new HashMap<String, Object>();
+		if (br.hasErrors()) {
+			modelData.put("championship", championship);
+			return new ModelAndView("/championship/update", modelData);
+		} else {
+			this.championshipService.updateChampionship(championship);
+			ss.setComplete();
+		    return new ModelAndView("redirect:/championship/");
+		}
+	}
+	
 }
