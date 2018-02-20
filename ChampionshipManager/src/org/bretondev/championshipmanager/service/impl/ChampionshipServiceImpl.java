@@ -19,6 +19,14 @@ public class ChampionshipServiceImpl implements ChampionshipService{
         this.championshipDAO = customerDAO;
     }
  
+	public void init() {
+		System.out.println("Initializing CHampionshipServiceImpl");
+	}
+	
+	public void destroy() {
+		System.out.println("Destroying CHampionshipServiceImpl");
+	}
+	
     @Override
     @Transactional
     @Cacheable(value="dataCache", key="'listChampionships'")

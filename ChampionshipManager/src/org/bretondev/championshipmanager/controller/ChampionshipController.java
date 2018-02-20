@@ -101,13 +101,6 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 		
 	}
 	
-	@RequestMapping(value="/delete", method = RequestMethod.POST)
-	public String deleteChampionship(@RequestParam("id") Integer id, @RequestParam Map<String,String> params, SessionStatus ss) {
-		this.championshipService.deleteChampionship(Integer.valueOf(params.get("id")));
-		ss.setComplete();
-	    return "redirect:/championship/";
-	}
-	
 	@RequestMapping(value="/openUpdate", method = RequestMethod.POST)
 	public String openUpdateChampionship(@RequestParam("id") Integer id, Model model) {
 		Championship c = this.championshipService.loadChampionship(id);
@@ -129,6 +122,13 @@ public class ChampionshipController implements ServletContextAware, ServletConfi
 			ss.setComplete();
 		    return new ModelAndView("redirect:/championship/");
 		}
+	}
+	
+	@RequestMapping(value="/delete", method = RequestMethod.POST)
+	public String deleteChampionship(@RequestParam("id") Integer id, @RequestParam Map<String,String> params, SessionStatus ss) {
+		this.championshipService.deleteChampionship(Integer.valueOf(params.get("id")));
+		ss.setComplete();
+	    return "redirect:/championship/";
 	}
 	
 }
