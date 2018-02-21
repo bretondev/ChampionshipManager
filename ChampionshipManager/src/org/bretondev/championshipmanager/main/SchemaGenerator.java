@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bretondev.championshipmanager.entities.Championship;
+import org.bretondev.championshipmanager.entities.Player;
 import org.bretondev.championshipmanager.entities.Team;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -31,6 +32,7 @@ public class SchemaGenerator {
                         .build());
         metadata.addAnnotatedClass(Championship.class);
         metadata.addAnnotatedClass(Team.class);
+        metadata.addAnnotatedClass(Player.class);
         SchemaExport schemaExport = new SchemaExport();
         schemaExport.setHaltOnError(true);
         schemaExport.setFormat(true);

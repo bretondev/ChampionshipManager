@@ -12,6 +12,16 @@
 
     insert into hibernate_sequence values ( 1 );
 
+    insert into hibernate_sequence values ( 1 );
+
+    create table Player (
+        id integer not null,
+        age integer not null,
+        firstName varchar(255),
+        lastName varchar(255),
+        primary key (id)
+    );
+
     create table Team (
         id integer not null,
         name varchar(255),
