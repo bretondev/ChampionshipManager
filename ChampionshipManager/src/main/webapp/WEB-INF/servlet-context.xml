@@ -55,6 +55,7 @@
         <beans:property name="annotatedClasses">
             <beans:list>
                 <beans:value>org.bretondev.championshipmanager.entities.Championship</beans:value>
+                <beans:value>org.bretondev.championshipmanager.entities.Team</beans:value>
             </beans:list>
         </beans:property>
         <beans:property name="hibernateProperties">
@@ -85,10 +86,16 @@
     <beans:bean id="championshipDAO" class="org.bretondev.championshipmanager.dao.impl.ChampionshipDAOImpl">
     	<beans:property name="sessionFactory" ref="hibernateAnnotatedSessionFactory" />
     </beans:bean>
+    <beans:bean id="teamDAO" class="org.bretondev.championshipmanager.dao.impl.TeamDAOImpl">
+    	<beans:property name="sessionFactory" ref="hibernateAnnotatedSessionFactory" />
+    </beans:bean>
 
     <!-- Inject the instance to service reference with adding customerDao instance -->
     <beans:bean id="championshipService" class="org.bretondev.championshipmanager.service.impl.ChampionshipServiceImpl" init-method="init" destroy-method="destroy">
         <beans:property name="championshipDAO" ref="championshipDAO"></beans:property>
+    </beans:bean>
+    <beans:bean id="teamService" class="org.bretondev.championshipmanager.service.impl.TeamServiceImpl">
+        <beans:property name="teamDAO" ref="teamDAO"></beans:property>
     </beans:bean>
  
 </beans:beans>
