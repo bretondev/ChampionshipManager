@@ -38,6 +38,15 @@
 		            	</div>
 		            </td>
 		        </tr>
+		        <tr>
+		            <td>
+		            	<div class="form-group">
+			            	<form:label path="team.id">Equipe</form:label>
+			            	<form:select path="team.id" items="${teamsMap}" />
+			            	<form:errors path="team.id" />
+		            	</div>
+		            </td>
+		        </tr>
 			</table>
 			<input class="btn btn-primary" type="submit" value="Enregistrer" />	
 		</form:form>

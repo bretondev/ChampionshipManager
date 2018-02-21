@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.bretondev.championshipmanager.entities.Player;
+import org.bretondev.championshipmanager.entities.Team;
 import org.bretondev.championshipmanager.service.PlayerService;
+import org.bretondev.championshipmanager.service.TeamService;
 import org.bretondev.championshipmanager.validator.PlayerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +34,14 @@ public class PlayerController {
 	public void setPlayerService(PlayerService cs) {
 	    this.playerService = cs;
 	}
+	
+	private TeamService teamService;
+	
+	@Autowired(required = true)
+	@Qualifier(value = "teamService")
+	public void setTeamService(TeamService ts) {
+	    this.teamService = ts;
+	}
 
 	private PlayerValidator playerValidator;
 	
@@ -46,6 +56,16 @@ public class PlayerController {
 		return this.playerService.listPlayers();
 	}
 	
+	@ModelAttribute(name="teamsMap")
+	public Map<Integer,String> getTeams() {
+		List<Team> list = this.teamService.listTeams();
+		Map<Integer,String> teamsMap = new HashMap<Integer,String>();
+		for (Team t : list) {
+			teamsMap.put(t.getId(), t.getName());
+		}
+		return teamsMap;
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String listPlayers(Model model) {
 	    return "/player/list";
@@ -75,8 +95,8 @@ public class PlayerController {
 	
 	@RequestMapping(value="/openUpdate", method = RequestMethod.POST)
 	public String openUpdatePlayer(@RequestParam("id") Integer id, Model model) {
-		Player t = this.playerService.loadPlayer(id);
-		model.addAttribute("player", t);
+		Player p = this.playerService.loadPlayer(id);
+		model.addAttribute("player", p);
 	    return "/player/update";
 	}
 	

@@ -25,6 +25,9 @@
 						<p>${p.age}</p>
 					</td>
 					<td class="text-center">
+						<p>${p.team.name}</p>
+					</td>
+					<td class="text-center">
 						<form action = "${pageContext.request.contextPath}/player/openUpdate" method = "POST">
 					         <input hidden="true" type="text" name="id" value="${p.id}">
 					         <input class="btn btn-primary" type = "submit" value = "Modifier" />
